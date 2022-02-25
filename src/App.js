@@ -18,8 +18,9 @@ class App extends Component {
     this.setState({ [e.currentTarget.name]: e.currentTarget.value });
   }
   
-  addNewContact=()=>{
-
+  addNewContact=(e)=>{
+    e.preventDefault();
+    
   }
 
   render(){
