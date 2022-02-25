@@ -1,117 +1,59 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
-// import ColorPicker from './components/ColorPicker';
-// import Counter from './components/Counter';
-import Container from './components/Container';
-import TodoList from './components/TodoList';
-import TodoEditor from './components/TodoEditor';
-import Filter from './components/Filter';
-// import Form from './components/Form';
-import initialTodos from './todos.json';
 
 class App extends Component {
   state = {
-    todos: initialTodos,
+    contacts: [
+      {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+      {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+      {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+      {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
+    ],
     filter: '',
-  };
-
-  addTodo = text => {
-    const todo = {
-      id: shortid.generate(),
-      text,
-      completed: false,
-    };
-
-    this.setState(prevState => ({ 
-      todos:[todo,...prevState.todos]
-    }))
-  };
-
-  deleteTodo = todoId => {
-    this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => todo.id !== todoId),
-    }));
-  };
-
-  toggleCompleted = todoId => {
-    // this.setState(prevState => ({
-    //   todos: prevState.todos.map(todo => {
-    //     if (todo.id === todoId) {
-    //       return {
-    //         ...todo,
-    //         completed: !todo.completed,
-    //       };
-    //     }
-
-    //     return todo;
-    //   }),
-    // }));
-
-    this.setState(({ todos }) => ({
-      todos: todos.map(todo =>
-        todo.id === todoId ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    }));
-  };
-
-  changeFilter = e => {
-    this.setState({ filter: e.currentTarget.value });
-  };
-
-  getVisibleTodos = () => {
-    const { filter, todos } = this.state;
-    const normalizedFilter = filter.toLowerCase();
-
-    return todos.filter(todo =>
-      todo.text.toLowerCase().includes(normalizedFilter),
-    );
-  };
-
-  calculateCompletedTodos = () => {
-    const { todos } = this.state;
-
-    return todos.reduce(
-      (total, todo) => (todo.completed ? total + 1 : total),
-      0,
-    );
-  };
-
-  render() {
-    const { todos, filter } = this.state;
-    const totalTodoCount = todos.length;
-    const completedTodoCount = this.calculateCompletedTodos();
-    const visibleTodos = this.getVisibleTodos();
-
-    return (
-      <Container>
-        {/* TODO: вынести в отдельный компонент */}
-
-        <div>
-          <p>Всего заметок: {totalTodoCount}</p>
-          <p>Выполнено: {completedTodoCount}</p>
-        </div>
-
-        <TodoEditor onSubmit={this.addTodo} />
-
-        <Filter value={filter} onChange={this.changeFilter} />
-
-        <TodoList
-          todos={visibleTodos}
-          onDeleteTodo={this.deleteTodo}
-          onToggleCompleted={this.toggleCompleted}
-        />
-      </Container>
-    );
+    name: '',
+    number: ''
   }
+  
+  render(){
+    return(
+      <div>
+        <h2>Phonebook</h2>
+        <form >
+          <label >
+            Name
+            <input
+              type="text"
+              name="name"
+              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+              required
+            />
+          </label>
+          <label >
+            Number
+            <input
+              type="tel"
+              name="number"
+              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+              required
+            />
+          </label>
+          <button type="submit">
+            Add contact
+          </button>
+        </form>
+        <h2>Contacts</h2>
+        <ul>
+          {this.state.contacts.map(contact=>
+            <li key={contact.id}>{contact.name}: {contact.number} <button type='button'>Delete</button></li>
+          )}
+        </ul>
+      </div>
+    )}
+  
 }
 
 export default App;
 
-// const colorPickerOptions = [
-//   { label: 'red', color: '#F44336' },
-//   { label: 'green', color: '#4CAF50' },
-//   { label: 'blue', color: '#2196F3' },
-//   { label: 'grey', color: '#607D8B' },
-//   { label: 'pink', color: '#E91E63' },
-//   { label: 'indigo', color: '#3F51B5' },
-// ];
+
