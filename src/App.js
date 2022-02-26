@@ -1,3 +1,4 @@
+import { isVisible } from '@testing-library/user-event/dist/utils';
 import React, { Component } from 'react';
 import shortid from 'shortid';
 
@@ -20,14 +21,35 @@ class App extends Component {
   
   addNewContact=(e)=>{
     e.preventDefault();
+    const {name,number,contacts}=this.state
+    this.setState({contacts:[...this.state.contacts,{id:"id-"+(contacts.length+1),name,number}]})
+  }
+
+  changeFilter = e => {
+    this.setState({ filter: e.currentTarget.value });
+  };
+
+  getVisibleContacts = () => {
+    const { filter, contacts } = this.state;
     
+    return contacts.filter(constact =>
+      constact.name.toLowerCase().includes(filter.toLowerCase()),
+    );
+  };
+
+  deleteContact=(contactId)=>{
+    this.setState(prevState=>({
+      contacts:prevState.contacts.filter(contact=>contact.id!==contactId)
+    }))
   }
 
   render(){
+    const visibleContacts=this.getVisibleContacts()
+
     return(
       <div>
         <h2>Phonebook</h2>
-        <form >
+        <form onSubmit={this.addNewContact}>
           <label >
             Name
             <input
@@ -57,9 +79,13 @@ class App extends Component {
           </button>
         </form>
         <h2>Contacts</h2>
+        <label>
+          Фильтр по имени
+          <input type="text" value={this.state.filter} onChange={this.changeFilter} />
+        </label>
         <ul>
-          {this.state.contacts.map(contact=>
-            <li key={contact.id}>{contact.name}: {contact.number} <button type='button'>Delete</button></li>
+          {visibleContacts.map(contact=>
+            <li key={contact.id}>{contact.name}: {contact.number} <button type='button' onClick={()=>this.deleteContact(contact.id)}>Delete</button></li>
           )}
         </ul>
       </div>
