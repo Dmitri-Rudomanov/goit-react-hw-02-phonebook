@@ -1,5 +1,6 @@
-import { isVisible } from '@testing-library/user-event/dist/utils';
 import React, { Component } from 'react';
+import PhonebookForm from 'components/PhonebookForm/PhonebookForm';
+import Filter from 'components/Filter/Filter';
 import shortid from 'shortid';
 
 class App extends Component {
@@ -11,18 +12,17 @@ class App extends Component {
       {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
     ],
     filter: '',
-    name: '',
-    number: '',
+    // name: '',
+    // number: '',
   }
 
-  handleChange=(e)=>{
-    this.setState({ [e.currentTarget.name]: e.currentTarget.value });
-  }
+  // handleChange=(e)=>{
+  //   this.setState({ [e.currentTarget.name]: e.currentTarget.value });
+  // }
   
-  addNewContact=(e)=>{
-    e.preventDefault();
-    const {name,number,contacts}=this.state
-    this.setState({contacts:[...this.state.contacts,{id:"id-"+(contacts.length+1),name,number}]})
+  addNewContact=(items)=>{
+    const {contacts}=this.state
+    this.setState({contacts:[...this.state.contacts,{id:"id-"+(contacts.length+1),...items}]})
   }
 
   changeFilter = e => {
@@ -32,8 +32,8 @@ class App extends Component {
   getVisibleContacts = () => {
     const { filter, contacts } = this.state;
     
-    return contacts.filter(constact =>
-      constact.name.toLowerCase().includes(filter.toLowerCase()),
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase()),
     );
   };
 
@@ -48,41 +48,14 @@ class App extends Component {
 
     return(
       <div>
-        <h2>Phonebook</h2>
-        <form onSubmit={this.addNewContact}>
-          <label >
-            Name
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChange}
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-            />
-          </label>
-          <label >
-            Number
-            <input
-              type="tel"
-              name="number"
-              value={this.state.number}
-              onChange={this.handleChange}
-              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-            />
-          </label>
-          <button type="submit">
-            Add contact
-          </button>
-        </form>
+        <h1>Phonebook</h1>
+        <PhonebookForm onAddContact={this.addNewContact}/>
         <h2>Contacts</h2>
-        <label>
+        {/* <label>
           Фильтр по имени
           <input type="text" value={this.state.filter} onChange={this.changeFilter} />
-        </label>
+        </label> */}
+        <Filter value={this.state.filter} onChange={this.changeFilter}/>
         <ul>
           {visibleContacts.map(contact=>
             <li key={contact.id}>{contact.name}: {contact.number} <button type='button' onClick={()=>this.deleteContact(contact.id)}>Delete</button></li>
