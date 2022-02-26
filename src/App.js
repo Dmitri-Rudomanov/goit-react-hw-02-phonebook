@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PhonebookForm from 'components/PhonebookForm/PhonebookForm';
 import Filter from 'components/Filter/Filter';
 import PhonebookList from 'components/PhonebookList/PhonebookList'
+import shortid from 'shortid';
 
 class App extends Component {
   state = {
@@ -28,7 +29,7 @@ class App extends Component {
       alert(`${items.name} is already in conacts`)
     }
     else {
-      this.setState({contacts:[...this.state.contacts,{id:"id-"+(contacts.length+1),...items}]})
+      this.setState({contacts:[...this.state.contacts,{id:shortid.generate(),...items}]})
     }
   }
 
