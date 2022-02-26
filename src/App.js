@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PhonebookForm from 'components/PhonebookForm/PhonebookForm';
 import Filter from 'components/Filter/Filter';
-import shortid from 'shortid';
+import PhonebookList from 'components/PhonebookList/PhonebookList'
 
 class App extends Component {
   state = {
@@ -22,7 +22,14 @@ class App extends Component {
   
   addNewContact=(items)=>{
     const {contacts}=this.state
-    this.setState({contacts:[...this.state.contacts,{id:"id-"+(contacts.length+1),...items}]})
+    const searchContact=contacts.map(contact=>contact.name).includes(items.name)
+
+    if(searchContact){
+      alert(`${items.name} is already in conacts`)
+    }
+    else {
+      this.setState({contacts:[...this.state.contacts,{id:"id-"+(contacts.length+1),...items}]})
+    }
   }
 
   changeFilter = e => {
@@ -51,16 +58,8 @@ class App extends Component {
         <h1>Phonebook</h1>
         <PhonebookForm onAddContact={this.addNewContact}/>
         <h2>Contacts</h2>
-        {/* <label>
-          Фильтр по имени
-          <input type="text" value={this.state.filter} onChange={this.changeFilter} />
-        </label> */}
         <Filter value={this.state.filter} onChange={this.changeFilter}/>
-        <ul>
-          {visibleContacts.map(contact=>
-            <li key={contact.id}>{contact.name}: {contact.number} <button type='button' onClick={()=>this.deleteContact(contact.id)}>Delete</button></li>
-          )}
-        </ul>
+        <PhonebookList visibleContacts={visibleContacts} deleteContact={this.deleteContact}/>
       </div>
     )}
   
