@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import s from './PhonebookForm.module.css'
 import PropTypes from "prop-types";
 
 
@@ -23,10 +24,11 @@ state={
 
   render(){
       return(
-        <form onSubmit={this.addContact}>
-        <label >
+        <form onSubmit={this.addContact} className={s.form}>
+        <label className={s.label}>
           Name
           <input
+            className={s.input}
             type="text"
             name="name"
             value={this.state.name}
@@ -36,9 +38,10 @@ state={
             required
           />
         </label>
-        <label >
+        <label className={s.label}>
           Number
           <input
+            className={s.input}
             type="tel"
             name="number"
             value={this.state.number}
@@ -48,7 +51,7 @@ state={
             required
           />
         </label>
-        <button type="submit">
+        <button type="submit" className={s.addContact}>
           Add contact
         </button>
       </form>
