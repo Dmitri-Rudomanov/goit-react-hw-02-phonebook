@@ -13,14 +13,8 @@ class App extends Component {
       {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
     ],
     filter: '',
-    // name: '',
-    // number: '',
   }
 
-  // handleChange=(e)=>{
-  //   this.setState({ [e.currentTarget.name]: e.currentTarget.value });
-  // }
-  
   addNewContact=(items)=>{
     const {contacts}=this.state
     const searchContact=contacts.map(contact=>contact.name).includes(items.name)
